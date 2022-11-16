@@ -1,26 +1,24 @@
+import os
 import numpy as np
 import matplotlib.pyplot as mtplt
 import random
+from generator import numberGenerate
 from sortMethod import *
 
-cluster = []
 
-desiredLength = 50
-
-while len(cluster) < desiredLength:
-    number = random.randint(1, desiredLength)
-
-    if not cluster:
-        cluster.append(number)
-
+# Check if input is not Integer
+while True:
+    numberLength = 0
+    try:
+        numberLength = int(
+            input('Insert how many number you wanted to generate: '))
+    except NameError and ValueError:
+        print('Input must be a number')
     else:
-        # Check exisiting number in cluster
-        for index in range(len(cluster)):
-            if number not in cluster:
-                cluster.append(number)
-                break
-            else:
-                continue
+        break
+
+cluster = numberGenerate(numberLength)
+textPath = 'result/SortingProcess.txt'
 
 print('Unsorted number: '+str(cluster))
 
@@ -31,11 +29,29 @@ print('2.)Bubble sort')
 userInput = input()
 
 if userInput == '1':
-    result, totalLoop = selectionSort(cluster)
+    result, totalLoop, changeRecorded = selectionSort(cluster)
+    if os.path.exists(textPath):
+        textOpen = open(textPath, 'w')
+        textOpen.write(str(changeRecorded))
+    else:
+        os.makedirs('result')
+        textOpen = open(textPath, 'x')
+        textOpen.write(str(changeRecorded))
+
     print('sort result: '+str(result))
     print('total Loop: '+str(totalLoop))
+    print('Each Loops successfully recorded at {}'.format(textPath))
 
 else:
-    result, totalLoop = bubbleSort(cluster)
+    result, totalLoop, changeRecorded = bubbleSort(cluster)
+    if os.path.exists(textPath):
+        textOpen = open(textPath, 'w')
+        textOpen.write(str(changeRecorded))
+    else:
+        os.makedirs('result')
+        textOpen = open(textPath, 'x')
+        textOpen.write(str(changeRecorded))
+
     print('sort result: '+str(result))
     print('total Loop: '+str(totalLoop))
+    print('Each Loops successfully recorded at {}'.format(textPath))
